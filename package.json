@@ -1,0 +1,45 @@
+{
+  "name": "screenshotone-validations",
+  "homepage": "https://screenshotone.com",
+  "version": "1.0.0",
+  "description": "Validation schemes for the ScreenshotOne API requests.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/screenshotone/validations.git"
+  },
+  "keywords": [
+    "screenshot",
+    "phantom",
+    "phantomjs",
+    "screenshots",
+    "webkit",
+    "webkit2png",
+    "url2png",
+    "headless",
+    "chrome",
+    "chromium",
+    "blink",
+    "render"
+  ],
+  "author": "Dmytro Krasun",
+  "license": "MIT",
+  "bugs": {
+    "email": "support@screenshotone.com",
+    "url": "https://github.com/screenshotone/validations/issues"
+  },
+  "main": "dist/main.js",
+  "types": "dist/@types/main.d.ts",
+  "devDependencies": {
+    "@types/node": "^17.0.40",
+    "typescript": "^4.7.3"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "./node_modules/typescript/bin/tsc",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "joi": "^17.9.2",
+    "screenshotone-devices": "^1.0.1"
+  }
+}
