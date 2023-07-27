@@ -1,6 +1,5 @@
 import Joi from "joi";
 import devices from "screenshotone-devices";
-import url from "url";
 
 const validationOptions = { abortEarly: false };
 
@@ -13,7 +12,7 @@ const signatureScheme = {
 
 const validUri = (value: any, helper: any) => {
     try {
-        const u = new url.URL(value);
+        const u = new URL(value);
 
         if (u.protocol !== "http:" && u.protocol !== "https:") {
             return helper.message(
