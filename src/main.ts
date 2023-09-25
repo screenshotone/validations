@@ -180,7 +180,8 @@ const commonOptionsScheme = Joi.object({
             "in",
             "au",
             "br",
-            "mx"
+            "mx",
+            "nz"
         )
         .optional(),
 
