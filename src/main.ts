@@ -240,7 +240,7 @@ const commonOptionsScheme = Joi.object({
     headers: Joi.array().items(),
     cookies: Joi.array().items(),
     proxy: Joi.string()
-        .uri({ scheme: ["http", "https", "socks", "socks4", "socks5"] })
+        .uri({ scheme: ["http"] })
         .optional(),
 
     time_zone: Joi.string().valid(
