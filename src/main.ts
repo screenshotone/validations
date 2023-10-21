@@ -284,7 +284,7 @@ const commonOptionsScheme = Joi.object({
     timeout: Joi.number().when("async", {
         is: true,
         then: Joi.number().integer().min(0).max(300).default(300),
-        otherwise: Joi.number().integer().min(0).max(50).default(50),
+        otherwise: Joi.number().integer().min(0).max(60).default(60),
     }),
     navigation_timeout: Joi.number().integer().min(0).max(30).default(30),
     wait_until: Joi.array()
