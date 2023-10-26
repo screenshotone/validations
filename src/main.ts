@@ -283,8 +283,8 @@ const commonOptionsScheme = Joi.object({
     delay: Joi.number().integer().min(0).max(30).optional(),
     timeout: Joi.number().when("async", {
         is: true,
-        then: Joi.number().integer().min(0).max(300).default(300),
-        otherwise: Joi.number().integer().min(0).max(60).default(60),
+        then: Joi.number().integer().min(0).max(600).default(600),
+        otherwise: Joi.number().integer().min(0).max(90).default(90),
     }),
     navigation_timeout: Joi.number().integer().min(0).max(30).default(30),
     wait_until: Joi.array()
