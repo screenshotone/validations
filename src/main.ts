@@ -319,6 +319,9 @@ const commonOptionsScheme = Joi.object({
         then: Joi.required(),
         otherwise: Joi.forbidden(),
     }),
+    storage_endpoint: Joi.string().uri().optional(),
+    storage_access_key_id: Joi.string().optional(),
+    storage_secret_access_key: Joi.string().optional(),
     storage_acl: Joi.string().valid("public-read", "").default(""),
     storage_class: Joi.string()
         .valid(
