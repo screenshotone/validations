@@ -386,6 +386,7 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
         scroll_delay: Joi.number().min(0).default(500),
         scroll_by: Joi.number().min(1).default(1000),
         scroll_start_immediately: Joi.boolean().default(true),
+        scroll_start_delay: Joi.number().min(0).default(0),
         scroll_complete: Joi.boolean().default(true),
         scroll_back_after_duration: Joi.number().integer().optional(),
         scroll_back: Joi.boolean().default(true),
