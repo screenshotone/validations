@@ -183,7 +183,6 @@ const commonOptionsScheme = Joi.object({
             "mx",
             "nz",
             "pe",
-            "li",
             "is",
             "ie"
         )
