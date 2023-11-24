@@ -123,6 +123,8 @@ const commonOptionsScheme = Joi.object({
         .valid("by_format", "empty", "json")
         .default("by_format"),
 
+    request_gpu_rendering: Joi.boolean().default(false),
+
     // emulation
     dark_mode: Joi.boolean().optional(),
     reduced_motion: Joi.boolean().optional(),
