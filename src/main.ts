@@ -109,6 +109,10 @@ const screenshotScheme = {
     clip_y: Joi.number().integer().optional(),
     clip_width: Joi.number().integer().optional(),
     clip_height: Joi.number().integer().optional(),
+
+    vision_prompt: Joi.string().optional(),
+    vision_max_tokens: Joi.string().optional(),
+    openai_api_key: Joi.string().optional(),
 };
 
 const commonOptionsScheme = Joi.object({
