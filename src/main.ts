@@ -105,6 +105,7 @@ const screenshotScheme = {
 
     metadata_image_size: Joi.boolean().default(false),
     metadata_fonts: Joi.boolean().default(false),
+    metadata_content: Joi.boolean().default(false),
 
     clip_x: Joi.number().integer().optional(),
     clip_y: Joi.number().integer().optional(),
