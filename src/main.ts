@@ -115,6 +115,9 @@ const screenshotScheme = {
     vision_prompt: Joi.string().optional(),
     vision_max_tokens: Joi.string().optional(),
     openai_api_key: Joi.string().optional(),
+
+    pdf_print_background: Joi.boolean().optional(),
+    pdf_fit_one_page: Joi.boolean().optional(),
 };
 
 const commonOptionsScheme = Joi.object({
