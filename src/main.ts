@@ -257,6 +257,8 @@ const commonOptionsScheme = Joi.object({
         .uri({ scheme: ["http"] })
         .optional(),
 
+    bypass_csp: Joi.boolean().default(false).optional(),
+
     time_zone: Joi.string().valid(
         "America/Belize",
         "America/Cayman",
