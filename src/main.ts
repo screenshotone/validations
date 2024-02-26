@@ -412,13 +412,7 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             then: Joi.number().integer().optional(),
             otherwise: Joi.forbidden(),
         }),
-
-        omit_background: Joi.when("format", {
-            is: "mov",
-            then: Joi.boolean().optional(),
-            otherwise: Joi.forbidden(),
-        }),
-
+        
         scroll_easing: Joi.string()
             .trim()
             .lowercase()
