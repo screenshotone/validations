@@ -383,6 +383,12 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             .default("mp4"),
         duration: Joi.number().min(1).max(30).default(5),
 
+        omit_background: Joi.when("format", {
+            is: Joi.valid("mov"),
+            then: Joi.boolean().default(false),
+            otherwise: Joi.forbidden(),
+        }),
+
         width: Joi.number().integer().optional(),
         height: Joi.number().integer().optional(),
         aspect_ratio: Joi.string()
@@ -412,7 +418,7 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             then: Joi.number().integer().optional(),
             otherwise: Joi.forbidden(),
         }),
-        
+
         scroll_easing: Joi.string()
             .trim()
             .lowercase()
