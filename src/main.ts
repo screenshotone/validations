@@ -315,6 +315,7 @@ const commonOptionsScheme = Joi.object({
         .default(["load"]),
 
     wait_for_selector: Joi.string().optional(),
+    fail_if_content_contains: Joi.string().optional(),
 
     async: Joi.boolean().default(false),
     webhook_url: Joi.string()
