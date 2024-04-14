@@ -240,12 +240,18 @@ const commonOptionsScheme = Joi.object({
             .max(2592000) // 1 month
             .default(14400)
             .optional(),
-        otherwise: Joi.forbidden(),
+        otherwise: Joi.forbidden().messages({
+            "any.unknown":
+                "The `cache_ttl` option cannot be used when the `cache` option is false or not set.",
+        }),
     }),
     cache_key: Joi.when("cache", {
         is: true,
         then: Joi.string().alphanum().min(1).max(250).optional(),
-        otherwise: Joi.forbidden(),
+        otherwise: Joi.forbidden().messages({
+            "any.unknown":
+                "The `cache_key` option cannot be used when the `cache` option is false or not set.",
+        }),
     }),
 
     // request options
