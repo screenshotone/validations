@@ -318,7 +318,7 @@ const commonOptionsScheme = Joi.object({
                 "networkidle2"
             )
         )
-        .default(["load"]),
+        .default([]),
 
     wait_for_selector: Joi.string().optional(),
     fail_if_content_contains: Joi.string().optional(),
