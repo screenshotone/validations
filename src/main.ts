@@ -302,7 +302,15 @@ const commonOptionsScheme = Joi.object({
     ),
 
     // wait, timeout
-    delay: Joi.number().integer().min(0).max(30).optional(),
+    delay: Joi.number()
+        .integer()
+        .min(0)
+        .when("timeout", {
+            is: Joi.number().greater(60),
+            then: Joi.number().max(60),
+            otherwise: Joi.number().max(30),
+        })
+        .optional(),
     timeout: Joi.number().when("async", {
         is: true,
         then: Joi.number().integer().min(0).max(600).default(600),
