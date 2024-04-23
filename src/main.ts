@@ -76,7 +76,7 @@ const screenshotScheme = {
         otherwise: Joi.forbidden(),
     }),
 
-    capture_beyond_viewport: Joi.boolean().default(true),
+    capture_beyond_viewport: Joi.boolean().default(Joi.ref('full_page')),
 
     selector: Joi.string().optional(),
 
