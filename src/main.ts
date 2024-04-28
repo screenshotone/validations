@@ -76,9 +76,15 @@ const screenshotScheme = {
         otherwise: Joi.forbidden(),
     }),
 
-    capture_beyond_viewport: Joi.boolean().default(Joi.ref('full_page')),
+    capture_beyond_viewport: Joi.boolean().default(Joi.ref("full_page")),
 
-    selector: Joi.string().optional(),
+    selector: Joi.when("format", {
+        is: Joi.valid("pdf"),
+        then: Joi.forbidden(),
+        otherwise: Joi.string().optional(),
+    }).messages({
+        "any.unknown": 'Rendering PDFs by "selector" is not allowed.',
+    }),
 
     error_on_selector_not_found: Joi.boolean().default(false),
 
