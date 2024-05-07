@@ -434,6 +434,11 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
         scroll_complete: Joi.boolean().default(true),
         scroll_back_after_duration: Joi.number().integer().optional(),
         scroll_back: Joi.boolean().default(true),
+        scroll_back_algorithm: Joi.string()
+            .trim()
+            .lowercase()
+            .valid("once", "repeat")
+            .default("once"),
 
         scroll_stop_after_duration: Joi.when("scroll_back", {
             is: false,
