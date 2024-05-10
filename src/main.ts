@@ -446,6 +446,27 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             otherwise: Joi.forbidden(),
         }),
 
+        clip_x: Joi.when("format", {
+            is: Joi.valid("gif"),
+            then: Joi.number().integer().optional(),
+            otherwise: Joi.forbidden(),
+        }),        
+        clip_y: Joi.when("format", {
+            is: Joi.valid("gif"),
+            then: Joi.number().integer().optional(),
+            otherwise: Joi.forbidden(),
+        }),        
+        clip_height: Joi.when("format", {
+            is: Joi.valid("gif"),
+            then: Joi.number().integer().optional(),
+            otherwise: Joi.forbidden(),
+        }),        
+        clip_width: Joi.when("format", {
+            is: Joi.valid("gif"),
+            then: Joi.number().integer().optional(),
+            otherwise: Joi.forbidden(),
+        }),        
+
         scroll_easing: Joi.string()
             .trim()
             .lowercase()
