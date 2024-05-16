@@ -449,7 +449,7 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
         scroll_try_navigate: Joi.boolean().default(false).optional(),
         scroll_navigate_after: Joi.number().integer().optional(),
         scroll_navigate_to_url: Joi.string().trim().custom(validUri).optional(),
-        scroll_navigate_link_hints: Joi.array().items(Joi.string().trim()).optional(),        
+        scroll_navigate_link_hints: Joi.array().items(Joi.string().trim()).default(['pricing', 'about', 'customers']).optional(),        
 
         clip_x: Joi.when("format", {
             is: Joi.valid("gif"),
