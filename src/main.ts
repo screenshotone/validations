@@ -446,6 +446,10 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             otherwise: Joi.forbidden(),
         }),
 
+        scroll_navigate_after: Joi.number().integer().optional(),
+        scroll_navigate_to_url: Joi.string().trim().custom(validUri).optional(),
+        scroll_navigate_hint_links: Joi.array().items(Joi.string().trim()).optional(),
+
         clip_x: Joi.when("format", {
             is: Joi.valid("gif"),
             then: Joi.number().integer().optional(),
