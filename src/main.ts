@@ -10,11 +10,22 @@ const signatureScheme = {
     signature: Joi.string().optional(),
 };
 
-const validUri = (value: any, helper: any) => {
+const validUri = (value: string, helper: any) => {
     try {
+        if (!value) {
+            return helper.message('"url" must be specified');
+        }
+        
         const u = new URL(value);
 
         if (u.protocol !== "http:" && u.protocol !== "https:") {
+            return helper.message(
+                '"url" must be a valid URI with a scheme matching the http|https pattern'
+            );
+        }
+
+        const withoutProtocol = value.substring((u.protocol + "//").length);
+        if (withoutProtocol.startsWith("http://") || withoutProtocol.startsWith("https://")) {
             return helper.message(
                 '"url" must be a valid URI with a scheme matching the http|https pattern'
             );

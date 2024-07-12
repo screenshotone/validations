@@ -1,7 +1,7 @@
 {
   "name": "screenshotone-validations",
   "homepage": "https://screenshotone.com",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "description": "Validation schemes for the ScreenshotOne API requests.",
   "repository": {
     "type": "git",
@@ -39,7 +39,9 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "joi": "^17.9.2",
-    "screenshotone-devices": "^1.0.1"
+    "@jest/globals": "^29.7.0",
+    "joi": "^17.13.3",
+    "screenshotone-devices": "^1.0.1",
+    "ts-jest": "^29.2.2"
   }
 }
