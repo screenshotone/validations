@@ -15,7 +15,7 @@ const validUri = (value: string, helper: any) => {
         if (!value) {
             return helper.message('"url" must be specified');
         }
-        
+
         const u = new URL(value);
 
         if (u.protocol !== "http:" && u.protocol !== "https:") {
@@ -25,7 +25,10 @@ const validUri = (value: string, helper: any) => {
         }
 
         const withoutProtocol = value.substring((u.protocol + "//").length);
-        if (withoutProtocol.startsWith("http://") || withoutProtocol.startsWith("https://")) {
+        if (
+            withoutProtocol.startsWith("http://") ||
+            withoutProtocol.startsWith("https://")
+        ) {
             return helper.message(
                 '"url" must be a valid URI with a scheme matching the http|https pattern'
             );
@@ -325,8 +328,8 @@ const commonOptionsScheme = Joi.object({
         .integer()
         .min(0)
         .when("timeout", {
-            is: Joi.number().greater(60),
-            then: Joi.number().max(60),
+            is: Joi.number().greater(300),
+            then: Joi.number().max(300),
             otherwise: Joi.number().max(30),
         })
         .optional(),
@@ -461,28 +464,31 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
         scroll_try_navigate: Joi.boolean().default(false).optional(),
         scroll_navigate_after: Joi.number().integer().optional(),
         scroll_navigate_to_url: Joi.string().trim().custom(validUri).optional(),
-        scroll_navigate_link_hints: Joi.array().items(Joi.string().trim()).default(['pricing', 'about', 'customers']).optional(),        
+        scroll_navigate_link_hints: Joi.array()
+            .items(Joi.string().trim())
+            .default(["pricing", "about", "customers"])
+            .optional(),
 
         clip_x: Joi.when("format", {
             is: Joi.valid("gif"),
             then: Joi.number().integer().optional(),
             otherwise: Joi.forbidden(),
-        }),        
+        }),
         clip_y: Joi.when("format", {
             is: Joi.valid("gif"),
             then: Joi.number().integer().optional(),
             otherwise: Joi.forbidden(),
-        }),        
+        }),
         clip_height: Joi.when("format", {
             is: Joi.valid("gif"),
             then: Joi.number().integer().optional(),
             otherwise: Joi.forbidden(),
-        }),        
+        }),
         clip_width: Joi.when("format", {
             is: Joi.valid("gif"),
             then: Joi.number().integer().optional(),
             otherwise: Joi.forbidden(),
-        }),        
+        }),
 
         scroll_easing: Joi.string()
             .trim()
