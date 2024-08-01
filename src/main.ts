@@ -135,7 +135,7 @@ const screenshotScheme = {
     clip_height: Joi.number().integer().optional(),
 
     vision_prompt: Joi.string().optional(),
-    vision_max_tokens: Joi.string().optional(),
+    vision_max_tokens: Joi.number().integer().optional(),
     openai_api_key: Joi.string().optional(),
 
     pdf_print_background: Joi.boolean().optional(),
