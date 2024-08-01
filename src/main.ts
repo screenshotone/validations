@@ -128,6 +128,8 @@ const screenshotScheme = {
     metadata_content: Joi.boolean().default(false),
     metadata_page_title: Joi.boolean().default(false),
     metadata_open_graph: Joi.boolean().default(false),
+    metadata_http_response_status_code: Joi.boolean().default(false),
+    metadata_http_response_headers: Joi.boolean().default(false),
 
     clip_x: Joi.number().integer().optional(),
     clip_y: Joi.number().integer().optional(),
