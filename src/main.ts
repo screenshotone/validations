@@ -167,6 +167,7 @@ const commonOptionsScheme = Joi.object({
         .default("by_format"),
 
     request_gpu_rendering: Joi.boolean().default(false),
+    fail_if_gpu_rendering_fails: Joi.boolean().default(false),
 
     // emulation
     dark_mode: Joi.boolean().optional(),
