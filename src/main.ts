@@ -387,8 +387,7 @@ const commonOptionsScheme = Joi.object({
     storage_endpoint: Joi.string().uri().optional(),
     storage_access_key_id: Joi.string().optional(),
     storage_secret_access_key: Joi.string().optional(),
-    // "bucket-owner-read" is for AWS S3 only
-    storage_acl: Joi.string().valid("public-read", "", "bucket-owner-read").default(""),
+    storage_acl: Joi.string().valid("public-read", "").default(""),
     storage_class: Joi.string()
         .valid(
             "standard",
