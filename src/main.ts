@@ -160,7 +160,7 @@ const screenshotScheme = {
 
 const commonOptionsScheme = Joi.object({
     // URL or HTML is required
-    url: Joi.string().trim().custom(validUri).optional(),
+    url: Joi.string().custom(validUri).optional(),
     html: Joi.string().optional(),
     markdown: Joi.string().optional(),
 
@@ -480,7 +480,7 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
 
         scroll_try_navigate: Joi.boolean().default(false).optional(),
         scroll_navigate_after: Joi.number().integer().optional(),
-        scroll_navigate_to_url: Joi.string().trim().custom(validUri).optional(),
+        scroll_navigate_to_url: Joi.string().custom(validUri).optional(),
         scroll_navigate_link_hints: Joi.array()
             .items(Joi.string().trim())
             .default(["pricing", "about", "customers"])
