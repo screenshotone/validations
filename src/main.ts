@@ -14,6 +14,10 @@ const validUri = (value: string, helper: any) => {
     try {
         if (!value) {
             return helper.message('"url" must be specified');
+        }        
+
+        if (value.trim().length === 0 || value.trim() !== value) {
+            return helper.message('"url" must be specified without leading and trailing white spaces');
         }
 
         const u = new URL(value);
