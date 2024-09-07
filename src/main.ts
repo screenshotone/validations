@@ -370,7 +370,7 @@ const commonOptionsScheme = Joi.object({
     wait_for_selector: Joi.string().optional(),
     wait_for_selector_algorithm: Joi.string().valid(
         "at_least_one",
-        "by_count"
+        "at_least_by_count"
     ).default('at_least_one').optional(),
     fail_if_content_contains: Joi.string().optional(),
 
