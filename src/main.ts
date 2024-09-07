@@ -368,6 +368,10 @@ const commonOptionsScheme = Joi.object({
         .default([]),
 
     wait_for_selector: Joi.string().optional(),
+    wait_for_selector_algorithm: Joi.string().valid(
+        "race",
+        "all"
+    ).default('race').optional(),
     fail_if_content_contains: Joi.string().optional(),
 
     async: Joi.boolean().default(false),
