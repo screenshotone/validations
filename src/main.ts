@@ -156,6 +156,8 @@ const screenshotScheme = {
 
     pdf_print_background: Joi.boolean().optional(),
     pdf_fit_one_page: Joi.boolean().optional(),
+    pdf_landscape: Joi.boolean().optional(),
+    pdf_paper_format: Joi.string().lowercase().valid("a0", "a1", "a2", "a3", "a4", "a5", "a6", "legal", "letter", "tabloid").optional(),
 };
 
 const commonOptionsScheme = Joi.object({
