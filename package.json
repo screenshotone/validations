@@ -1,7 +1,7 @@
 {
   "name": "screenshotone-validations",
   "homepage": "https://screenshotone.com",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "description": "Validation schemes for the ScreenshotOne API requests.",
   "repository": {
     "type": "git",
