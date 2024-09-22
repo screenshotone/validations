@@ -301,7 +301,7 @@ const commonOptionsScheme = Joi.object({
     headers: Joi.array().items(),
     cookies: Joi.array().items(),
     proxy: Joi.string()
-        .uri({ scheme: ["http"] })
+        .uri({ scheme: ["http"], encodeUri: false })
         .optional(),
 
     bypass_csp: Joi.boolean().default(false).optional(),
