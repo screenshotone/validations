@@ -301,6 +301,9 @@ const commonOptionsScheme = Joi.object({
     headers: Joi.array().items(),
     cookies: Joi.array().items(),
     proxy: Joi.string()
+        // `encodeUri` allows to specify Unicode characters in the proxy URI 
+        // it is useful when targeting is used in proxies and cities or countries are specified
+        // with special characters
         .uri({ scheme: ["http"], encodeUri: true })
         .optional(),
 
