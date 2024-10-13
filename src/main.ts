@@ -487,6 +487,9 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             otherwise: Joi.forbidden(),
         }),
 
+        scroll_till_selector: Joi.string().optional(),   
+        scroll_till_selector_adjust_top: Joi.number().integer().optional(),
+
         scroll_try_navigate: Joi.boolean().default(false).optional(),
         scroll_navigate_after: Joi.number().integer().optional(),
         scroll_navigate_to_url: Joi.string().custom(validUri).optional(),
