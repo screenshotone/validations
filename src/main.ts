@@ -14,10 +14,12 @@ const validUri = (value: string, helper: any) => {
     try {
         if (!value) {
             return helper.message('"url" must be specified');
-        }        
+        }
 
         if (value.trim().length === 0 || value.trim() !== value) {
-            return helper.message('"url" must be specified without leading and trailing white spaces');
+            return helper.message(
+                '"url" must be specified without leading and trailing white spaces'
+            );
         }
 
         const u = new URL(value);
@@ -157,7 +159,20 @@ const screenshotScheme = {
     pdf_print_background: Joi.boolean().optional(),
     pdf_fit_one_page: Joi.boolean().optional(),
     pdf_landscape: Joi.boolean().optional(),
-    pdf_paper_format: Joi.string().valid("a0", "a1", "a2", "a3", "a4", "a5", "a6", "legal", "letter", "tabloid").optional(),
+    pdf_paper_format: Joi.string()
+        .valid(
+            "a0",
+            "a1",
+            "a2",
+            "a3",
+            "a4",
+            "a5",
+            "a6",
+            "legal",
+            "letter",
+            "tabloid"
+        )
+        .optional(),
 };
 
 const commonOptionsScheme = Joi.object({
@@ -301,7 +316,7 @@ const commonOptionsScheme = Joi.object({
     headers: Joi.array().items(),
     cookies: Joi.array().items(),
     proxy: Joi.string()
-        // `encodeUri` allows to specify Unicode characters in the proxy URI 
+        // `encodeUri` allows to specify Unicode characters in the proxy URI
         // it is useful when targeting is used in proxies and cities or countries are specified
         // with special characters
         .uri({ scheme: ["http"], encodeUri: true })
@@ -373,11 +388,13 @@ const commonOptionsScheme = Joi.object({
         .default([]),
 
     wait_for_selector: Joi.string().optional(),
-    wait_for_selector_algorithm: Joi.string().valid(
-        "at_least_one",
-        "at_least_by_count"
-    ).default('at_least_one').optional(),
-    fail_if_content_contains: Joi.string().optional(),
+    wait_for_selector_algorithm: Joi.string()
+        .valid("at_least_one", "at_least_by_count")
+        .default("at_least_one")
+        .optional(),
+    fail_if_content_contains: Joi.array()
+        .items(Joi.string().optional())
+        .default([]),
 
     async: Joi.boolean().default(false),
     webhook_url: Joi.string()
@@ -487,7 +504,7 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             otherwise: Joi.forbidden(),
         }),
 
-        scroll_till_selector: Joi.string().optional(),   
+        scroll_till_selector: Joi.string().optional(),
         scroll_till_selector_adjust_top: Joi.number().integer().optional(),
 
         scroll_try_navigate: Joi.boolean().default(false).optional(),
