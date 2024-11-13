@@ -219,6 +219,7 @@ const commonOptionsScheme = Joi.object({
     styles: Joi.string().optional(),
     hide_selectors: Joi.array().items(),
     click: Joi.string().optional(),
+    error_on_click_selector_not_found: Joi.boolean().default(true),
 
     // viewport options
     viewport_device: Joi.string()
