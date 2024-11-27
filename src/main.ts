@@ -442,6 +442,7 @@ const commonOptionsScheme = Joi.object({
         then: Joi.boolean(),
         otherwise: Joi.forbidden(),
     }),
+    metadata_icon: Joi.boolean().default(false),
 
 }).oxor("ip_country_code", "proxy");
 
