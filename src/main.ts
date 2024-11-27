@@ -135,22 +135,6 @@ const screenshotScheme = {
         .default("jpg"),
 
     metadata_image_size: Joi.boolean().default(false),
-    metadata_fonts: Joi.boolean().default(false),
-    metadata_content: Joi.boolean().default(false),
-    metadata_page_title: Joi.boolean().default(false),
-    metadata_open_graph: Joi.boolean().default(false),
-    metadata_http_response_status_code: Joi.boolean()
-        .default(false)
-        .when("url", {
-            is: Joi.exist(),
-            then: Joi.boolean(),
-            otherwise: Joi.forbidden(),
-        }),
-    metadata_http_response_headers: Joi.boolean().default(false).when("url", {
-        is: Joi.exist(),
-        then: Joi.boolean(),
-        otherwise: Joi.forbidden(),
-    }),
 
     clip_x: Joi.number().integer().optional(),
     clip_y: Joi.number().integer().optional(),
@@ -441,6 +425,24 @@ const commonOptionsScheme = Joi.object({
     storage_return_location: Joi.boolean().default(false),
 
     ignore_host_errors: Joi.boolean().default(false),
+
+    metadata_fonts: Joi.boolean().default(false),
+    metadata_content: Joi.boolean().default(false),
+    metadata_page_title: Joi.boolean().default(false),
+    metadata_open_graph: Joi.boolean().default(false),
+    metadata_http_response_status_code: Joi.boolean()
+        .default(false)
+        .when("url", {
+            is: Joi.exist(),
+            then: Joi.boolean(),
+            otherwise: Joi.forbidden(),
+        }),
+    metadata_http_response_headers: Joi.boolean().default(false).when("url", {
+        is: Joi.exist(),
+        then: Joi.boolean(),
+        otherwise: Joi.forbidden(),
+    }),
+
 }).oxor("ip_country_code", "proxy");
 
 const optionsScheme = commonOptionsScheme.append(screenshotScheme);
