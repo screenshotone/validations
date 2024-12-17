@@ -10,41 +10,45 @@ const signatureScheme = {
     signature: Joi.string().optional(),
 };
 
-const validUri = (value: string, helper: any) => {
-    try {
-        if (!value) {
-            return helper.message('"url" must be specified');
+const createUriValidator = (fieldName: string) => {
+    return (value: string, helper: any) => {
+        try {
+            if (!value) {
+                return helper.message(`"${fieldName}" must be specified`);
+            }
+
+            if (value.trim().length === 0 || value.trim() !== value) {
+                return helper.message(
+                    `"${fieldName}" must be specified without leading and trailing white spaces`
+                );
+            }
+
+            const u = new URL(value);
+
+            if (u.protocol !== "http:" && u.protocol !== "https:") {
+                return helper.message(
+                    `"${fieldName}" must be a valid URI with a scheme matching the http|https pattern`
+                );
+            }
+
+            const withoutProtocol = value.substring((u.protocol + "//").length);
+            if (
+                withoutProtocol.startsWith("http://") ||
+                withoutProtocol.startsWith("https://")
+            ) {
+                return helper.message(
+                    `"${fieldName}" must be a valid URI with a scheme matching the http|https pattern`
+                );
+            }
+
+            return value;
+        } catch (e) {
+            return helper.message(`"${fieldName}" must be a valid URI`);
         }
-
-        if (value.trim().length === 0 || value.trim() !== value) {
-            return helper.message(
-                '"url" must be specified without leading and trailing white spaces'
-            );
-        }
-
-        const u = new URL(value);
-
-        if (u.protocol !== "http:" && u.protocol !== "https:") {
-            return helper.message(
-                '"url" must be a valid URI with a scheme matching the http|https pattern'
-            );
-        }
-
-        const withoutProtocol = value.substring((u.protocol + "//").length);
-        if (
-            withoutProtocol.startsWith("http://") ||
-            withoutProtocol.startsWith("https://")
-        ) {
-            return helper.message(
-                '"url" must be a valid URI with a scheme matching the http|https pattern'
-            );
-        }
-
-        return value;
-    } catch (e) {
-        return helper.message('"url" must be a valid URI');
-    }
+    };
 };
+
+const validUri = createUriValidator("url");
 
 const screenshotScheme = {
     // image options
@@ -310,6 +314,8 @@ const commonOptionsScheme = Joi.object({
         // it is useful when targeting is used in proxies and cities or countries are specified
         // with special characters
         .uri({ scheme: ["http"], encodeUri: true })
+        // makes sense to double-check it, since it will be anyway validated and fail if not correct
+        .custom(createUriValidator("proxy"))
         .optional(),
 
     bypass_csp: Joi.boolean().default(false).optional(),
@@ -443,7 +449,6 @@ const commonOptionsScheme = Joi.object({
         otherwise: Joi.forbidden(),
     }),
     metadata_icon: Joi.boolean().default(false),
-
 }).oxor("ip_country_code", "proxy");
 
 const optionsScheme = commonOptionsScheme.append(screenshotScheme);
