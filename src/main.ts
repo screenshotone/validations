@@ -105,7 +105,11 @@ const screenshotScheme = {
         otherwise: Joi.forbidden(),
     }),
 
-    capture_beyond_viewport: Joi.boolean().default(Joi.ref("full_page")),
+    capture_beyond_viewport: Joi.when("selector", {
+        is: Joi.string().required(),
+        then: Joi.boolean().default(true),
+        otherwise: Joi.boolean().default(Joi.ref("full_page"))
+    }),
 
     selector: Joi.when("format", {
         is: Joi.valid("pdf"),
