@@ -114,6 +114,11 @@ const screenshotScheme = {
     }).messages({
         "any.unknown": 'Rendering PDFs by "selector" is not allowed.',
     }),
+    selector_scroll_into_view: Joi.when("selector", {
+        is: Joi.string().required(),
+        then: Joi.boolean().default(true),
+        otherwise: Joi.forbidden(),
+    }),
 
     error_on_selector_not_found: Joi.boolean().default(false),
 
