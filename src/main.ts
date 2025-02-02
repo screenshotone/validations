@@ -400,6 +400,9 @@ const commonOptionsScheme = Joi.object({
     fail_if_content_contains: Joi.array()
         .items(Joi.string().optional())
         .default([]),
+    fail_if_content_missing: Joi.array()
+        .items(Joi.string().optional())
+        .default([]),
 
     async: Joi.boolean().default(false),
     webhook_url: Joi.string()
