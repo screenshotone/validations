@@ -101,7 +101,7 @@ const screenshotScheme = {
     }),
     full_page_algorithm: Joi.when("full_page", {
         is: true,
-        then: Joi.string().valid("by_sections", "default").default("default"),
+        then: Joi.string().valid("by_sections", "default", "viewport_full_height").default("default"),
         otherwise: Joi.forbidden(),
     }),
 
