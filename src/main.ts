@@ -542,6 +542,12 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             .default(["pricing", "about", "customers"])
             .optional(),
 
+        scroll_to_end_after: Joi.when("scenario", {
+            is: Joi.valid("scroll"),
+            then: Joi.number().integer().optional(),
+            otherwise: Joi.forbidden(),
+        }),
+
         clip_x: Joi.when("format", {
             is: Joi.valid("gif"),
             then: Joi.number().integer().optional(),
