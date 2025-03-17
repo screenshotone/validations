@@ -328,7 +328,7 @@ const commonOptionsScheme = Joi.object({
         // makes sense to double-check it, since it will be anyway validated and fail if not correct
         .custom(createUriValidator("proxy"))
         .optional(),
-    attachment_filename: Joi.string().optional(),
+    attachment_name: Joi.string().optional(),
 
     bypass_csp: Joi.boolean().default(false).optional(),
 
