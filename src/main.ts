@@ -108,7 +108,7 @@ const screenshotScheme = {
     capture_beyond_viewport: Joi.when("selector", {
         is: Joi.string().required(),
         then: Joi.boolean().default(true),
-        otherwise: Joi.boolean().default(Joi.ref("full_page"))
+        otherwise: Joi.boolean().default(Joi.ref("full_page")),
     }),
 
     selector: Joi.when("format", {
@@ -143,7 +143,8 @@ const screenshotScheme = {
             "avif",
             "heif",
             "html",
-            "pdf"
+            "pdf",
+            "markdown"
         )
         .default("jpg"),
 
@@ -327,6 +328,7 @@ const commonOptionsScheme = Joi.object({
         // makes sense to double-check it, since it will be anyway validated and fail if not correct
         .custom(createUriValidator("proxy"))
         .optional(),
+    attachment_filename: Joi.string().optional(),
 
     bypass_csp: Joi.boolean().default(false).optional(),
 
@@ -402,6 +404,9 @@ const commonOptionsScheme = Joi.object({
         .items(Joi.string().optional())
         .default([]),
     fail_if_content_missing: Joi.array()
+        .items(Joi.string().optional())
+        .default([]),
+    fail_if_request_failed: Joi.array()
         .items(Joi.string().optional())
         .default([]),
 
