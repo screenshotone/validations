@@ -424,7 +424,8 @@ const commonOptionsScheme = Joi.object({
             then: Joi.optional(),
             otherwise: Joi.forbidden(),
         }),
-    webhook_sign: Joi.boolean().default(true),
+    webhook_sign: Joi.boolean().default(true),    
+    webhook_errors: Joi.boolean().default(false),
 
     // store
     store: Joi.boolean().optional(),
