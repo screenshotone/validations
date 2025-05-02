@@ -325,6 +325,7 @@ const commonOptionsScheme = Joi.object({
     authorization: Joi.string().optional(),
     headers: Joi.array().items(),
     cookies: Joi.array().items(),
+
     proxy: Joi.string()
         // `encodeUri` allows to specify Unicode characters in the proxy URI
         // it is useful when targeting is used in proxies and cities or countries are specified
@@ -333,6 +334,26 @@ const commonOptionsScheme = Joi.object({
         // makes sense to double-check it, since it will be anyway validated and fail if not correct
         .custom(createUriValidator("proxy"))
         .optional(),
+    proxy_resources: Joi.array()
+        .items(
+            Joi.string().valid(
+                "document",
+                "stylesheet",
+                "image",
+                "media",
+                "font",
+                "script",
+                "texttrack",
+                "xhr",
+                "fetch",
+                "eventsource",
+                "websocket",
+                "manifest",
+                "other"
+            )
+        )
+        .default([]),
+
     attachment_name: Joi.string().optional(),
 
     bypass_csp: Joi.boolean().default(false).optional(),
