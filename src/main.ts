@@ -334,25 +334,6 @@ const commonOptionsScheme = Joi.object({
         // makes sense to double-check it, since it will be anyway validated and fail if not correct
         .custom(createUriValidator("proxy"))
         .optional(),
-    proxy_resources: Joi.array()
-        .items(
-            Joi.string().valid(
-                "document",
-                "stylesheet",
-                "image",
-                "media",
-                "font",
-                "script",
-                "texttrack",
-                "xhr",
-                "fetch",
-                "eventsource",
-                "websocket",
-                "manifest",
-                "other"
-            )
-        )
-        .default([]),
 
     attachment_name: Joi.string().optional(),
 
