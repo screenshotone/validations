@@ -164,6 +164,12 @@ const screenshotScheme = {
     vision_max_tokens: Joi.number().integer().optional(),
     openai_api_key: Joi.string().optional(),
 
+    pdf_margin: Joi.string().optional(),
+    pdf_margin_top: Joi.string().optional(),
+    pdf_margin_right: Joi.string().optional(),
+    pdf_margin_bottom: Joi.string().optional(),
+    pdf_margin_left: Joi.string().optional(),
+
     pdf_print_background: Joi.boolean().optional(),
     pdf_fit_one_page: Joi.boolean().optional(),
     pdf_landscape: Joi.boolean().optional(),
