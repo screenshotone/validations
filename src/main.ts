@@ -467,6 +467,14 @@ const commonOptionsScheme = Joi.object({
 
     metadata_fonts: Joi.boolean().default(false),
     metadata_content: Joi.boolean().default(false),
+    metadata_content_format: Joi.string()
+        .valid("html", "markdown")
+        .default("html")
+        .when("metadata_content", {
+            is: true,
+            then: Joi.optional().default("html"),
+            otherwise: Joi.forbidden(),
+        }),
     metadata_page_title: Joi.boolean().default(false),
     metadata_open_graph: Joi.boolean().default(false),
     metadata_http_response_status_code: Joi.boolean()
