@@ -195,6 +195,8 @@ const commonOptionsScheme = Joi.object({
     html: Joi.string().optional(),
     markdown: Joi.string().optional(),
 
+    // for "by_format" response type, the generated content must not be stored on ScreenshotOne servers and
+    // provide the URL of the generated content to the requestor
     response_type: Joi.string()
         .trim()
         .lowercase()
