@@ -230,6 +230,8 @@ const commonOptionsScheme = Joi.object({
         .default([]),
     styles: Joi.string().optional(),
     hide_selectors: Joi.array().items(),
+    hover: Joi.string().optional(),
+    error_on_hover_selector_not_found: Joi.boolean().default(true),
     click: Joi.string().optional(),
     error_on_click_selector_not_found: Joi.boolean().default(true),
 
