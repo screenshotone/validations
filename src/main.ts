@@ -19,7 +19,7 @@ const createUriValidator = (fieldName: string) => {
 
             if (value.trim().length === 0 || value.trim() !== value) {
                 return helper.message(
-                    `"${fieldName}" must be specified without leading and trailing white spaces`
+                    `"${fieldName}" must be specified without leading and trailing white spaces`,
                 );
             }
 
@@ -27,7 +27,7 @@ const createUriValidator = (fieldName: string) => {
 
             if (u.protocol !== "http:" && u.protocol !== "https:") {
                 return helper.message(
-                    `"${fieldName}" must be a valid URI with a scheme matching the http|https pattern`
+                    `"${fieldName}" must be a valid URI with a scheme matching the http|https pattern`,
                 );
             }
 
@@ -37,7 +37,7 @@ const createUriValidator = (fieldName: string) => {
                 withoutProtocol.startsWith("https://")
             ) {
                 return helper.message(
-                    `"${fieldName}" must be a valid URI with a scheme matching the http|https pattern`
+                    `"${fieldName}" must be a valid URI with a scheme matching the http|https pattern`,
                 );
             }
 
@@ -61,7 +61,7 @@ const screenshotScheme = {
             "tiff",
             "jp2",
             "avif",
-            "heif"
+            "heif",
         ),
         then: Joi.number().integer().min(0).max(100).default(100),
         otherwise: Joi.forbidden(),
@@ -104,6 +104,13 @@ const screenshotScheme = {
         then: Joi.string().valid("by_sections", "default").default("default"),
         otherwise: Joi.forbidden(),
     }),
+    full_page_slices: Joi.boolean().default(false),
+    full_page_slice_height: Joi.number()
+        .integer()
+        .min(1)
+        .max(16000)
+        .default(4000),
+    full_page_slice_overlap: Joi.number().integer().min(0).default(0),
 
     capture_beyond_viewport: Joi.when("selector", {
         is: Joi.string().required(),
@@ -149,7 +156,7 @@ const screenshotScheme = {
             "heif",
             "html",
             "pdf",
-            "markdown"
+            "markdown",
         )
         .default("jpg"),
 
@@ -184,7 +191,7 @@ const screenshotScheme = {
             "a6",
             "legal",
             "letter",
-            "tabloid"
+            "tabloid",
         )
         .optional(),
 };
@@ -224,8 +231,8 @@ const commonOptionsScheme = Joi.object({
                 "load",
                 "domcontentloaded",
                 "networkidle0",
-                "networkidle2"
-            )
+                "networkidle2",
+            ),
         )
         .default([]),
     styles: Joi.string().optional(),
@@ -271,7 +278,7 @@ const commonOptionsScheme = Joi.object({
             "nz",
             "pe",
             "is",
-            "ie"
+            "ie",
         )
         .optional(),
 
@@ -301,8 +308,8 @@ const commonOptionsScheme = Joi.object({
                 "eventsource",
                 "websocket",
                 "manifest",
-                "other"
-            )
+                "other",
+            ),
         )
         .default([]),
 
@@ -382,7 +389,7 @@ const commonOptionsScheme = Joi.object({
         "Europe/London",
         "Europe/Madrid",
         "Pacific/Auckland",
-        "Pacific/Majuro"
+        "Pacific/Majuro",
     ),
 
     // wait, timeout
@@ -407,8 +414,8 @@ const commonOptionsScheme = Joi.object({
                 "load",
                 "domcontentloaded",
                 "networkidle0",
-                "networkidle2"
-            )
+                "networkidle2",
+            ),
         )
         .default([]),
 
@@ -462,7 +469,7 @@ const commonOptionsScheme = Joi.object({
             "glacier",
             "deep_archive",
             "outposts",
-            "glacier_ir"
+            "glacier_ir",
         )
         .default("standard"),
     storage_return_location: Joi.boolean().default(false),
@@ -496,7 +503,39 @@ const commonOptionsScheme = Joi.object({
     metadata_icon: Joi.boolean().default(false),
 }).oxor("ip_country_code", "proxy");
 
-const optionsScheme = commonOptionsScheme.append(screenshotScheme);
+const optionsScheme = commonOptionsScheme
+    .append(screenshotScheme)
+    .custom((value, helpers) => {
+        if (value.full_page_slices) {
+            if (value.full_page !== true) {
+                return helpers.error("any.invalid", {
+                    message: "`full_page_slices` requires `full_page=true`",
+                });
+            }
+            if (value.response_type !== "json") {
+                return helpers.error("any.invalid", {
+                    message: "`full_page_slices` requires `response_type=json`",
+                });
+            }
+            if (value.store === true) {
+                return helpers.error("any.invalid", {
+                    message: "`full_page_slices` does not support `store=true`",
+                });
+            }
+        }
+
+        if (
+            value.full_page_slices &&
+            value.full_page_slice_overlap >= value.full_page_slice_height
+        ) {
+            return helpers.error("any.invalid", {
+                message:
+                    "`full_page_slice_overlap` must be smaller than `full_page_slice_height`",
+            });
+        }
+
+        return value;
+    });
 
 const withEssentialsOptionsScheme = optionsScheme.or("html", "url", "markdown");
 
@@ -510,7 +549,7 @@ const bulkScheme = Joi.object({
 const withHtmlOrUrlOrMarkdownRequired = commonOptionsScheme.or(
     "html",
     "url",
-    "markdown"
+    "markdown",
 );
 
 const animateScheme = withHtmlOrUrlOrMarkdownRequired
@@ -617,7 +656,7 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
                 "ease_in_out_quart",
                 "ease_in_quint",
                 "ease_out_quint",
-                "ease_in_out_quint"
+                "ease_in_out_quint",
             )
             .default("ease_in_out_quint"),
     })
