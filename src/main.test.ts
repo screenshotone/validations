@@ -271,23 +271,6 @@ describe("Full page slices validations", () => {
         expect(value.full_page_slice_overlap_height).toBe(0);
     });
 
-    test("full_page_slice_overlap is accepted for backward compatibility", async () => {
-        const { error, value } = validationSchemes.take.getScheme.validate(
-            {
-                url: "https://example.com",
-                full_page: true,
-                full_page_slices: true,
-                response_type: "json",
-                full_page_slice_height: 4000,
-                full_page_slice_overlap: 500,
-            },
-            validationSchemes.take.validationOptions,
-        );
-
-        expect(error).toBeUndefined();
-        expect(value.full_page_slice_overlap_height).toBe(500);
-    });
-
     test("full_page_slices defaults slice options", async () => {
         const { error, value } = validationSchemes.take.getScheme.validate(
             {

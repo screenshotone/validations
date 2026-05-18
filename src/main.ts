@@ -111,7 +111,6 @@ const screenshotScheme = {
         .max(16000)
         .default(4000),
     full_page_slice_overlap_height: Joi.number().integer().min(0).optional(),
-    full_page_slice_overlap: Joi.number().integer().min(0).optional(),
 
     capture_beyond_viewport: Joi.when("selector", {
         is: Joi.string().required(),
@@ -509,9 +508,7 @@ const optionsScheme = commonOptionsScheme
     .custom((value, helpers) => {
         if (value.full_page_slices) {
             value.full_page_slice_overlap_height =
-                value.full_page_slice_overlap_height ??
-                value.full_page_slice_overlap ??
-                0;
+                value.full_page_slice_overlap_height ?? 0;
 
             if (value.full_page !== true) {
                 return helpers.error("any.invalid", {
