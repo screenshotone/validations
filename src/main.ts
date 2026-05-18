@@ -110,7 +110,8 @@ const screenshotScheme = {
         .min(1)
         .max(16000)
         .default(4000),
-    full_page_slice_overlap: Joi.number().integer().min(0).default(0),
+    full_page_slice_overlap_height: Joi.number().integer().min(0).optional(),
+    full_page_slice_overlap: Joi.number().integer().min(0).optional(),
 
     capture_beyond_viewport: Joi.when("selector", {
         is: Joi.string().required(),
@@ -507,16 +508,17 @@ const optionsScheme = commonOptionsScheme
     .append(screenshotScheme)
     .custom((value, helpers) => {
         if (value.full_page_slices) {
+            value.full_page_slice_overlap_height =
+                value.full_page_slice_overlap_height ??
+                value.full_page_slice_overlap ??
+                0;
+
             if (value.full_page !== true) {
                 return helpers.error("any.invalid", {
                     message: "`full_page_slices` requires `full_page=true`",
                 });
             }
-            if (value.response_type !== "json") {
-                return helpers.error("any.invalid", {
-                    message: "`full_page_slices` requires `response_type=json`",
-                });
-            }
+            
             if (value.store === true) {
                 return helpers.error("any.invalid", {
                     message: "`full_page_slices` does not support `store=true`",
@@ -526,11 +528,13 @@ const optionsScheme = commonOptionsScheme
 
         if (
             value.full_page_slices &&
-            value.full_page_slice_overlap >= value.full_page_slice_height
+            value.full_page_slice_height -
+                value.full_page_slice_overlap_height <
+                100
         ) {
             return helpers.error("any.invalid", {
                 message:
-                    "`full_page_slice_overlap` must be smaller than `full_page_slice_height`",
+                    "`full_page_slice_height` minus `full_page_slice_overlap_height` must be at least 100",
             });
         }
 

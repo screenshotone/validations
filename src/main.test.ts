@@ -177,8 +177,8 @@ describe("Full page slices validations", () => {
         expect(error).toBeDefined();
     });
 
-    test("full_page_slices requires JSON response type", async () => {
-        const { error } = validationSchemes.take.getScheme.validate(
+    test("full_page_slices allows by_format response type", async () => {
+        const { error, value } = validationSchemes.take.getScheme.validate(
             {
                 url: "https://example.com",
                 full_page: true,
@@ -188,7 +188,8 @@ describe("Full page slices validations", () => {
             validationSchemes.take.validationOptions,
         );
 
-        expect(error).toBeDefined();
+        expect(error).toBeUndefined();
+        expect(value.response_type).toBe("by_format");
     });
 
     test("full_page_slices rejects store", async () => {
@@ -222,14 +223,14 @@ describe("Full page slices validations", () => {
         expect(error).toBeDefined();
     });
 
-    test("full_page_slice_overlap must be non-negative", async () => {
+    test("full_page_slice_overlap_height must be non-negative", async () => {
         const { error } = validationSchemes.take.getScheme.validate(
             {
                 url: "https://example.com",
                 full_page: true,
                 full_page_slices: true,
                 response_type: "json",
-                full_page_slice_overlap: -1,
+                full_page_slice_overlap_height: -1,
             },
             validationSchemes.take.validationOptions,
         );
@@ -237,7 +238,7 @@ describe("Full page slices validations", () => {
         expect(error).toBeDefined();
     });
 
-    test("full_page_slice_overlap must be smaller than full_page_slice_height", async () => {
+    test("full_page_slice_overlap_height must leave at least 100px step", async () => {
         const { error } = validationSchemes.take.getScheme.validate(
             {
                 url: "https://example.com",
@@ -245,7 +246,7 @@ describe("Full page slices validations", () => {
                 full_page_slices: true,
                 response_type: "json",
                 full_page_slice_height: 4000,
-                full_page_slice_overlap: 4000,
+                full_page_slice_overlap_height: 3901,
             },
             validationSchemes.take.validationOptions,
         );
@@ -253,7 +254,7 @@ describe("Full page slices validations", () => {
         expect(error).toBeDefined();
     });
 
-    test("full_page_slice_overlap can be zero", async () => {
+    test("full_page_slice_overlap_height can be zero", async () => {
         const { error, value } = validationSchemes.take.getScheme.validate(
             {
                 url: "https://example.com",
@@ -261,13 +262,30 @@ describe("Full page slices validations", () => {
                 full_page_slices: true,
                 response_type: "json",
                 full_page_slice_height: 4000,
-                full_page_slice_overlap: 0,
+                full_page_slice_overlap_height: 0,
             },
             validationSchemes.take.validationOptions,
         );
 
         expect(error).toBeUndefined();
-        expect(value.full_page_slice_overlap).toBe(0);
+        expect(value.full_page_slice_overlap_height).toBe(0);
+    });
+
+    test("full_page_slice_overlap is accepted for backward compatibility", async () => {
+        const { error, value } = validationSchemes.take.getScheme.validate(
+            {
+                url: "https://example.com",
+                full_page: true,
+                full_page_slices: true,
+                response_type: "json",
+                full_page_slice_height: 4000,
+                full_page_slice_overlap: 500,
+            },
+            validationSchemes.take.validationOptions,
+        );
+
+        expect(error).toBeUndefined();
+        expect(value.full_page_slice_overlap_height).toBe(500);
     });
 
     test("full_page_slices defaults slice options", async () => {
@@ -283,6 +301,6 @@ describe("Full page slices validations", () => {
 
         expect(error).toBeUndefined();
         expect(value.full_page_slice_height).toBe(4000);
-        expect(value.full_page_slice_overlap).toBe(0);
+        expect(value.full_page_slice_overlap_height).toBe(0);
     });
 });
