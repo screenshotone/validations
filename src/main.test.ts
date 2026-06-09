@@ -317,6 +317,22 @@ describe("Clip validations", () => {
         expect(error).toBeDefined();
     });
 
+    test("clip options set to zero and full_page are mutually exclusive", async () => {
+        const { error } = validationSchemes.take.getScheme.validate(
+            {
+                url: "https://example.com",
+                full_page: true,
+                clip_x: 0,
+                clip_y: 0,
+                clip_width: 0,
+                clip_height: 0,
+            },
+            validationSchemes.take.validationOptions,
+        );
+
+        expect(error).toBeDefined();
+    });
+
     test.each(["clip_x", "clip_y", "clip_width", "clip_height"])(
         "%s and full_page are mutually exclusive",
         async (clipOption) => {
