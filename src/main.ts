@@ -506,6 +506,22 @@ const commonOptionsScheme = Joi.object({
 const optionsScheme = commonOptionsScheme
     .append(screenshotScheme)
     .custom((value, helpers) => {
+        const clipOptions = [
+            "clip_x",
+            "clip_y",
+            "clip_width",
+            "clip_height",
+        ];
+
+        if (
+            value.full_page === true &&
+            clipOptions.some((option) => value[option] !== undefined)
+        ) {
+            return helpers.error("any.invalid", {
+                message: "`clip` and `full_page` are mutually exclusive",
+            });
+        }
+
         if (value.full_page_slices) {
             value.full_page_slice_overlap_height =
                 value.full_page_slice_overlap_height ?? 0;

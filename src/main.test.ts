@@ -287,3 +287,64 @@ describe("Full page slices validations", () => {
         expect(value.full_page_slice_overlap_height).toBe(0);
     });
 });
+
+describe("Clip validations", () => {
+    test("full_page is valid without clip options", async () => {
+        const { error } = validationSchemes.take.getScheme.validate(
+            {
+                url: "https://example.com",
+                full_page: true,
+            },
+            validationSchemes.take.validationOptions,
+        );
+
+        expect(error).toBeUndefined();
+    });
+
+    test("clip and full_page are mutually exclusive", async () => {
+        const { error } = validationSchemes.take.getScheme.validate(
+            {
+                url: "https://example.com",
+                full_page: true,
+                clip_x: 0,
+                clip_y: 0,
+                clip_width: 800,
+                clip_height: 600,
+            },
+            validationSchemes.take.validationOptions,
+        );
+
+        expect(error).toBeDefined();
+    });
+
+    test.each(["clip_x", "clip_y", "clip_width", "clip_height"])(
+        "%s and full_page are mutually exclusive",
+        async (clipOption) => {
+            const { error } = validationSchemes.take.getScheme.validate(
+                {
+                    url: "https://example.com",
+                    full_page: true,
+                    [clipOption]: 0,
+                },
+                validationSchemes.take.validationOptions,
+            );
+
+            expect(error).toBeDefined();
+        },
+    );
+
+    test("clip is valid without full_page", async () => {
+        const { error } = validationSchemes.take.getScheme.validate(
+            {
+                url: "https://example.com",
+                clip_x: 0,
+                clip_y: 0,
+                clip_width: 800,
+                clip_height: 600,
+            },
+            validationSchemes.take.validationOptions,
+        );
+
+        expect(error).toBeUndefined();
+    });
+});
