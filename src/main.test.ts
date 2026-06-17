@@ -1,5 +1,41 @@
 import { describe, expect, test } from "@jest/globals";
-import validationSchemes from "./main";
+import validationSchemes, { validateRequest } from "./main";
+
+describe("request validator", () => {
+    test("returns validated value for a valid request", async () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.url).toBe("https://example.com");
+        expect(value.format).toBe("jpg");
+    });
+
+    test("returns error and validated value for an invalid request", async () => {
+        const { error, value } = validateRequest(
+            validationSchemes.take.getScheme,
+            { url: "https://" },
+        );
+
+        expect(error).toBeDefined();
+        expect(error?.message).toContain("must be a valid URI");
+        expect(value.url).toBe("https://");
+    });
+
+    test("returns a clear error when full_page_scroll is specified without full_page", async () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            full_page: false,
+            full_page_scroll: true,
+        });
+
+        expect(error).toEqual({
+            message: '"full_page_scroll" is not allowed',
+        });
+        expect(value.full_page_scroll).toBe(true);
+    });
+});
 
 describe("URL validations", () => {
     test("https://https://example.com must be invalid", async () => {

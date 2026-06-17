@@ -3,6 +3,42 @@ import devices from "screenshotone-devices";
 
 const validationOptions = { abortEarly: false };
 
+export interface RequestValidationError {
+    message: string;
+}
+
+export interface RequestValidationResult {
+    error?: RequestValidationError;
+    value: any;
+}
+
+export type RequestValidator = (request: any) => RequestValidationResult;
+
+export function validateRequest(
+    validationScheme: Joi.Schema,
+    request: any,
+): RequestValidationResult {
+    const { error, value } = validationScheme.validate(
+        request,
+        validationOptions,
+    );
+
+    if (error !== undefined) {
+        return {
+            error: {
+                message: error.message,
+            },
+            value,
+        };
+    }
+
+    return { value };
+}
+
+const createValidator = (validationScheme: Joi.Schema): RequestValidator => {
+    return (request: any) => validateRequest(validationScheme, request);
+};
+
 const accessKeyScheme = {
     access_key: Joi.string().optional(),
 };
@@ -506,12 +542,7 @@ const commonOptionsScheme = Joi.object({
 const optionsScheme = commonOptionsScheme
     .append(screenshotScheme)
     .custom((value, helpers) => {
-        const clipOptions = [
-            "clip_x",
-            "clip_y",
-            "clip_width",
-            "clip_height",
-        ];
+        const clipOptions = ["clip_x", "clip_y", "clip_width", "clip_height"];
 
         if (
             value.full_page === true &&
@@ -531,7 +562,7 @@ const optionsScheme = commonOptionsScheme
                     message: "`full_page_slices` requires `full_page=true`",
                 });
             }
-            
+
             if (value.store === true) {
                 return helpers.error("any.invalid", {
                     message: "`full_page_slices` does not support `store=true`",
@@ -679,25 +710,38 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
     })
     .oxor("scroll_stop_after_duration", "scroll_back_after_duration");
 
+const animateGetScheme = animateScheme.append({
+    ...accessKeyScheme,
+    ...signatureScheme,
+});
+const animatePostScheme = animateScheme.append({ ...accessKeyScheme });
+const bulkPostScheme = bulkScheme.append(accessKeyScheme);
+const takeGetScheme = withEssentialsOptionsScheme.append({
+    ...accessKeyScheme,
+    ...signatureScheme,
+});
+const takePostScheme = withEssentialsOptionsScheme.append({
+    ...accessKeyScheme,
+});
+
 export default {
     animate: {
-        getScheme: animateScheme.append({
-            ...accessKeyScheme,
-            ...signatureScheme,
-        }),
-        postScheme: animateScheme.append({ ...accessKeyScheme }),
+        getScheme: animateGetScheme,
+        postScheme: animatePostScheme,
+        validateGet: createValidator(animateGetScheme),
+        validatePost: createValidator(animatePostScheme),
         validationOptions,
     },
     bulk: {
-        postScheme: bulkScheme.append(accessKeyScheme),
+        postScheme: bulkPostScheme,
+        validatePost: createValidator(bulkPostScheme),
         validationOptions,
     },
     take: {
-        getScheme: withEssentialsOptionsScheme.append({
-            ...accessKeyScheme,
-            ...signatureScheme,
-        }),
-        postScheme: withEssentialsOptionsScheme.append({ ...accessKeyScheme }),
+        getScheme: takeGetScheme,
+        postScheme: takePostScheme,
+        validateGet: createValidator(takeGetScheme),
+        validatePost: createValidator(takePostScheme),
         validationOptions,
     },
 };
