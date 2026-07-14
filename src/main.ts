@@ -86,6 +86,23 @@ const createUriValidator = (fieldName: string) => {
 
 const validUri = createUriValidator("url");
 
+const hostnameLabelPattern =
+    "(?:\\*|[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)";
+const proxyBypassHostPattern = new RegExp(
+    `^(?!\\*$)${hostnameLabelPattern}(?:\\.${hostnameLabelPattern})*$`,
+    "i",
+);
+
+const validProxyBypassHost = (value: string, helper: any) => {
+    if (value.length > 253 || !proxyBypassHostPattern.test(value)) {
+        return helper.message(
+            '"proxy_bypass_hosts" must contain only hostname patterns without a scheme, port, path, or query',
+        );
+    }
+
+    return value;
+};
+
 const screenshotScheme = {
     // image options
     image_quality: Joi.when("format", {
@@ -387,6 +404,16 @@ const commonOptionsScheme = Joi.object({
         // makes sense to double-check it, since it will be anyway validated and fail if not correct
         .custom(createUriValidator("proxy"))
         .optional(),
+    proxy_bypass_hosts: Joi.when("proxy", {
+        is: Joi.exist(),
+        then: Joi.array()
+            .items(Joi.string().custom(validProxyBypassHost))
+            .default([]),
+        otherwise: Joi.forbidden().messages({
+            "any.unknown":
+                'The "proxy_bypass_hosts" option requires the "proxy" option to be specified.',
+        }),
+    }),
 
     attachment_name: Joi.string().optional(),
 

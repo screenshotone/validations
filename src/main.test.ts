@@ -199,6 +199,69 @@ describe("URL validations", () => {
     });
 });
 
+describe("Proxy bypass host validations", () => {
+    test("exact and wildcard hostname patterns must be valid", async () => {
+        const proxyBypassHosts = [
+            "cdn.example.com",
+            "cdn.example.screenshotone.com",
+            "cdn.*.screenshotone.com",
+        ];
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy: "http://example.com:8080",
+            proxy_bypass_hosts: proxyBypassHosts,
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.proxy_bypass_hosts).toEqual(proxyBypassHosts);
+    });
+
+    test("proxy_bypass_hosts requires proxy", async () => {
+        const { error } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy_bypass_hosts: ["cdn.example.com"],
+        });
+
+        expect(error?.message).toContain(
+            'requires the "proxy" option to be specified',
+        );
+    });
+
+    test("proxy_bypass_hosts defaults to an empty list when proxy is specified", async () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy: "http://example.com:8080",
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.proxy_bypass_hosts).toEqual([]);
+    });
+
+    test("a full URL must not be a valid proxy bypass host", async () => {
+        const { error } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy: "http://example.com:8080",
+            proxy_bypass_hosts: ["https://cdn.example.com/resource.js"],
+        });
+
+        expect(error?.message).toContain(
+            "must contain only hostname patterns",
+        );
+    });
+
+    test("a hostname with a port must not be a valid proxy bypass host", async () => {
+        const { error } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy: "http://example.com:8080",
+            proxy_bypass_hosts: ["cdn.example.com:443"],
+        });
+
+        expect(error?.message).toContain(
+            "must contain only hostname patterns",
+        );
+    });
+});
+
 describe("Full page slices validations", () => {
     test("full_page_slices requires full_page", async () => {
         const { error } = validationSchemes.take.getScheme.validate(
