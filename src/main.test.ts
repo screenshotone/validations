@@ -262,6 +262,73 @@ describe("Proxy bypass host validations", () => {
     });
 });
 
+describe("Managed proxy validations", () => {
+    test("proxy_managed defaults to false", async () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.proxy_managed).toBe(false);
+    });
+
+    test("proxy_managed can be enabled", async () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy_managed: true,
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.proxy_managed).toBe(true);
+    });
+
+    test("proxy cannot be used when proxy_managed is enabled", async () => {
+        const { error } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy_managed: true,
+            proxy: "http://example.com:8080",
+        });
+
+        expect(error?.message).toContain(
+            'The "proxy" option cannot be used when "proxy_managed" is enabled.',
+        );
+    });
+
+    test("ip_country_code cannot be used when proxy_managed is enabled", async () => {
+        const { error } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy_managed: true,
+            ip_country_code: "us",
+        });
+
+        expect(error?.message).toContain(
+            'The "ip_country_code" option cannot be used when "proxy_managed" is enabled.',
+        );
+    });
+
+    test("a custom proxy can be used when proxy_managed is disabled", async () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy_managed: false,
+            proxy: "http://example.com:8080",
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.proxy).toBe("http://example.com:8080");
+    });
+
+    test("ip_country_code can be used when proxy_managed is disabled", async () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            proxy_managed: false,
+            ip_country_code: "us",
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.ip_country_code).toBe("us");
+    });
+});
+
 describe("Full page slices validations", () => {
     test("full_page_slices requires full_page", async () => {
         const { error } = validationSchemes.take.getScheme.validate(
