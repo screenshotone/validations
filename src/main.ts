@@ -270,6 +270,7 @@ const commonOptionsScheme = Joi.object({
     // emulation
     dark_mode: Joi.boolean().optional(),
     reduced_motion: Joi.boolean().optional(),
+    reduce_motion: Joi.boolean().default(false),
     media_type: Joi.string()
         .trim()
         .lowercase()

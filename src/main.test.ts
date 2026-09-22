@@ -37,6 +37,36 @@ describe("request validator", () => {
     });
 });
 
+describe("reduce motion validation", () => {
+    test("defaults reduce_motion to false", () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.reduce_motion).toBe(false);
+    });
+
+    test("accepts reduce_motion set to true", () => {
+        const { error, value } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            reduce_motion: true,
+        });
+
+        expect(error).toBeUndefined();
+        expect(value.reduce_motion).toBe(true);
+    });
+
+    test("rejects a non-boolean reduce_motion value", () => {
+        const { error } = validationSchemes.take.validateGet({
+            url: "https://example.com",
+            reduce_motion: "sometimes",
+        });
+
+        expect(error).toBeDefined();
+    });
+});
+
 describe("URL validations", () => {
     test("https://https://example.com must be invalid", async () => {
         const { error } = validationSchemes.take.getScheme.validate(
