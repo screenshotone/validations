@@ -353,7 +353,8 @@ const commonOptionsScheme = Joi.object({
     block_ads: Joi.boolean().default(false),
     block_socials: Joi.boolean().default(false),
     block_trackers: Joi.boolean().default(false),
-    block_requests: Joi.array().items(Joi.string()).default([]),
+    // matched against every request of the page, so the count is capped
+    block_requests: Joi.array().items(Joi.string()).max(100).default([]),
     block_resources: Joi.array()
         .items(
             Joi.string().valid(
@@ -509,8 +510,10 @@ const commonOptionsScheme = Joi.object({
     fail_if_content_missing: Joi.array()
         .items(Joi.string().optional())
         .default([]),
+    // matched against every failed request of the page, so the count is capped
     fail_if_request_failed: Joi.array()
         .items(Joi.string().optional())
+        .max(100)
         .default([]),
 
     async: Joi.boolean().default(false),
