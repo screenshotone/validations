@@ -313,45 +313,34 @@ const commonOptionsScheme = Joi.object({
     geolocation_accuracy: Joi.number().integer().positive().optional(),
 
     // location options
-    ip_country_code: Joi.when("proxy_managed", {
-        is: true,
-        then: Joi.forbidden().messages({
-            "any.unknown":
-                'The "ip_country_code" option cannot be used when "proxy_managed" is enabled.',
-        }),
-        otherwise: Joi.string()
-            .valid(
-                "us",
-                "gb",
-                "de",
-                "it",
-                "fr",
-                "cn",
-                "ca",
-                "es",
-                "jp",
-                "kr",
-                "in",
-                "au",
-                "br",
-                "mx",
-                "nz",
-                "pe",
-                "is",
-                "ie",
-            )
-            .optional(),
-    }),
-
-    servers_region: Joi.string().valid("us-east").default("us-east"),
+    ip_country_code: Joi.string()
+        .valid(
+            "us",
+            "gb",
+            "de",
+            "it",
+            "fr",
+            "cn",
+            "ca",
+            "es",
+            "jp",
+            "kr",
+            "in",
+            "au",
+            "br",
+            "mx",
+            "nz",
+            "pe",
+            "is",
+            "ie",
+        )
+        .optional(),
 
     // blocking options
-    block_annoyances: Joi.boolean().default(false),
     block_cookie_banners: Joi.boolean().default(false),
     block_banners_by_heuristics: Joi.boolean().default(false),
     block_chats: Joi.boolean().default(false),
     block_ads: Joi.boolean().default(false),
-    block_socials: Joi.boolean().default(false),
     block_trackers: Joi.boolean().default(false),
     // matched against every request of the page, so the count is capped
     block_requests: Joi.array().items(Joi.string()).max(100).default([]),
@@ -405,22 +394,14 @@ const commonOptionsScheme = Joi.object({
     headers: Joi.array().items(),
     cookies: Joi.array().items(),
 
-    proxy_managed: Joi.boolean().default(false),
-    proxy: Joi.when("proxy_managed", {
-        is: true,
-        then: Joi.forbidden().messages({
-            "any.unknown":
-                'The "proxy" option cannot be used when "proxy_managed" is enabled.',
-        }),
-        otherwise: Joi.string()
-            // `encodeUri` allows to specify Unicode characters in the proxy URI
-            // it is useful when targeting is used in proxies and cities or countries are specified
-            // with special characters
-            .uri({ scheme: ["http"], encodeUri: true })
-            // makes sense to double-check it, since it will be anyway validated and fail if not correct
-            .custom(createUriValidator("proxy"))
-            .optional(),
-    }),
+    proxy: Joi.string()
+        // `encodeUri` allows to specify Unicode characters in the proxy URI
+        // it is useful when targeting is used in proxies and cities or countries are specified
+        // with special characters
+        .uri({ scheme: ["http"], encodeUri: true })
+        // makes sense to double-check it, since it will be anyway validated and fail if not correct
+        .custom(createUriValidator("proxy"))
+        .optional(),
     proxy_bypass_hosts: Joi.when("proxy", {
         is: Joi.exist(),
         then: Joi.array()
