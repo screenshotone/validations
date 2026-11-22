@@ -451,6 +451,7 @@ const commonOptionsScheme = Joi.object({
         "Europe/Madrid",
         "Pacific/Auckland",
         "Pacific/Majuro",
+        "UTC",
     ),
 
     // wait, timeout
