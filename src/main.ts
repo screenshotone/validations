@@ -628,6 +628,9 @@ const withHtmlOrUrlOrMarkdownRequired = commonOptionsScheme.or(
     "markdown",
 );
 
+// the largest side, in pixels, of a recorded video (not a GIF)
+const maxVideoSide = 16384;
+
 const animateScheme = withHtmlOrUrlOrMarkdownRequired
     .append({
         format: Joi.string()
@@ -643,8 +646,36 @@ const animateScheme = withHtmlOrUrlOrMarkdownRequired
             otherwise: Joi.forbidden(),
         }),
 
-        width: Joi.number().integer().optional(),
-        height: Joi.number().integer().optional(),
+        // To deliver working, good-quality videos, the viewport and the
+        // video size are limited. GIFs keep no limit.
+        viewport_width: Joi.number()
+            .integer()
+            .when("format", {
+                is: Joi.valid("gif"),
+                otherwise: Joi.number().max(maxVideoSide),
+            })
+            .optional(),
+        viewport_height: Joi.number()
+            .integer()
+            .when("format", {
+                is: Joi.valid("gif"),
+                otherwise: Joi.number().max(maxVideoSide),
+            })
+            .optional(),
+        width: Joi.number()
+            .integer()
+            .when("format", {
+                is: Joi.valid("gif"),
+                otherwise: Joi.number().max(maxVideoSide),
+            })
+            .optional(),
+        height: Joi.number()
+            .integer()
+            .when("format", {
+                is: Joi.valid("gif"),
+                otherwise: Joi.number().max(maxVideoSide),
+            })
+            .optional(),
         aspect_ratio: Joi.string()
             .trim()
             .lowercase()
